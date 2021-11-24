@@ -1,0 +1,1 @@
+# CDK construct for AWS Lambda with Webpack

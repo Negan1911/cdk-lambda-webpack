@@ -4,6 +4,9 @@
   "description": "Construct for AWS Lambda with Webpack",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
   "sideEffects": false,
   "repository": "git@github.com:Negan1911/cdk-lambda-webpack.git",
   "author": "Nahuel Veron <nahuelav96@gmail.com>",
