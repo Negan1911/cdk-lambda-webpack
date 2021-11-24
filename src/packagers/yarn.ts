@@ -133,7 +133,7 @@ export class Yarn {
       args.push(`--network-concurrency ${packagerOptions.networkConcurrency}`);
     }
 
-    return spawnProcess(command, args, { cwd }).return();
+    return BbPromise.resolve(spawnProcess(command, args, { cwd })).return();
   }
 
   // "Yarn install" prunes automatically

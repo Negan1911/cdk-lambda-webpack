@@ -108,14 +108,14 @@ export class NPM {
     const command = /^win/.test(process.platform) ? 'npm.cmd' : 'npm';
     const args = ['install'];
 
-    return spawnProcess(command, args, { cwd }).return();
+    return BbPromise.resolve(spawnProcess(command, args, { cwd })).return();
   }
 
   static prune(cwd: string) {
     const command = /^win/.test(process.platform) ? 'npm.cmd' : 'npm';
     const args = ['prune'];
 
-    return spawnProcess(command, args, { cwd }).return();
+    return BbPromise.resolve(spawnProcess(command, args, { cwd })).return();
   }
 
   static runScripts(cwd: string, scriptNames: string[]) {

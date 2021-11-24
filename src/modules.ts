@@ -176,7 +176,7 @@ function getProdModules(externalModules: StatsCompilation[], packagePath: string
   return prodModules;
 }
 
-export function packModules(stats: ExtModules, id: string, options: Options) {
+export function packModules(stats: ExtModules, id: string, options: Options): Promise<void> {
   const includes = options.includeModules
 
   if (!includes) {

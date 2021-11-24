@@ -89,7 +89,7 @@ export function isBuiltinModule(moduleName: string) {
  * @param {string[]} [args] - Arguments
  * @param {Object} [options] - Options for child_process.spawn
  */
-export function spawnProcess(command: string, args: string[], options?: childProcess.SpawnOptionsWithoutStdio): BbPromise<{ stdout?: string; stderr?: string }> {
+export function spawnProcess(command: string, args: string[], options?: childProcess.SpawnOptionsWithoutStdio): Promise<{ stdout?: string; stderr?: string }> {
   return new BbPromise((resolve, reject) => {
     const child = childProcess.spawn(command, args, options);
     let stdout = '';
