@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "cdk-lambda-webpack": {
+      "signature": "947536b7f867dcdf92bd939d0064acaa",
+      "file": true
+    }
+  }
+}
