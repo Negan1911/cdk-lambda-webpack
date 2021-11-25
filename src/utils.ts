@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import path from 'path'
 import BbPromise from 'bluebird'
 import childProcess from 'child_process'
 import builtinModules from 'builtin-modules'
@@ -13,19 +14,30 @@ export type Options = {
   entry: string
   packager: 'npm' | 'yarn'
   webpackConfigPath: string
-  webpackOutputPath: string
   includeModules?: {
     packagePath?: string,
     forceInclude?: string[],
     forceExclude?: string[],
     nodeModulesRelativeDir?: string
   },
-  options: {
+  options?: {
     noInstall?: boolean,
     noFrozenLockfile?: boolean
     ignoreScripts?: boolean
     networkConcurrency?: number
   }
+}
+
+export function getEntry(entry: string): [string, string] {
+  const entrySplit = entry.split(':')
+
+  if (!entry.includes(':') || entrySplit.length !== 2)
+    throw new Error(`Invalid entry: ${entry} does not conform the epected [path]:[export] format.`)
+
+  return [
+    path.isAbsolute(entrySplit[0]) ? entrySplit[0] : path.join(process.cwd(), entrySplit[0]),
+    entrySplit[1]
+  ]
 }
 
 export function uid() {

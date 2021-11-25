@@ -137,7 +137,7 @@ export class Yarn {
   }
 
   // "Yarn install" prunes automatically
-  static prune(cwd: string, packagerOptions: YarnPackagerOptions) {
+  static prune(cwd: string, packagerOptions: YarnPackagerOptions = {}) {
     return Yarn.install(cwd, packagerOptions);
   }
 

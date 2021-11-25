@@ -176,7 +176,7 @@ function getProdModules(externalModules: StatsCompilation[], packagePath: string
   return prodModules;
 }
 
-export function packModules(stats: ExtModules, id: string, options: Options): Promise<void> {
+export function packModules(stats: ExtModules, id: string, options: Options, buildPath: string): Promise<void> {
   const includes = options.includeModules
 
   if (!includes) {
@@ -251,7 +251,7 @@ export function packModules(stats: ExtModules, id: string, options: Options): Pr
       }
 
       // (1.a) Install all needed modules
-      const compositeModulePath = path.join(options.webpackOutputPath, id, 'dependencies');
+      const compositeModulePath = path.join(buildPath, 'dependencies');
       const compositePackageJson = path.join(compositeModulePath, 'package.json');
 
       // (1.a.1) Create a package.json
