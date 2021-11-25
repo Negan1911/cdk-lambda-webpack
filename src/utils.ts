@@ -11,7 +11,6 @@ export type ExtModule = { origin: string; external: string }
 export type ExtModules = { outputPath: string, externalModules: ExtModule[] }
 
 export type Options = {
-  entry: string
   packager: 'npm' | 'yarn'
   webpackConfigPath: string
   includeModules?: {
