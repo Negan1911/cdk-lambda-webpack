@@ -14,7 +14,8 @@ interface LambdaWebpackProps extends Omit<lambda.FunctionProps, 'code'> {
 export async function LambdaWebpack(scope: Construct, id: string, { webpack, handler, ...props }: LambdaWebpackProps) {
   const zipId = uid()
   const config = require(path.isAbsolute(webpack.webpackConfigPath) ? webpack.webpackConfigPath : path.join(process.cwd(), webpack.webpackConfigPath))
-  const buildPath = path.join(process.cwd(), '.build', id)
+  const buildFolder = path.join(process.cwd(), '.build')
+  const buildPath = path.join(buildFolder, id)
   const [entry, exportName] = getEntry(handler)
   
   const stat = await webpackCompile({
@@ -28,7 +29,7 @@ export async function LambdaWebpack(scope: Construct, id: string, { webpack, han
   })
   
   await packModules(stat, id, webpack, buildPath)
-  await zipDirectory(process.cwd(), '.build', zipId)
+  await zipDirectory(buildPath, buildFolder, zipId)
   
   return new lambda.Function(scope, id, {
     ...props,

@@ -1,9 +1,10 @@
 import fs from 'fs'
+import path from 'path'
 import archiver from 'archiver'
 
 
 export function zipDirectory(inPath: string, outPath: string, fileName: string) {
-  const output = fs.createWriteStream(outPath + `/${fileName}.zip`)
+  const output = fs.createWriteStream(path.join(outPath, `${fileName}.zip`))
   const archive = archiver('zip', { zlib: { level: 9 } })
 
   return new Promise((resolve, reject) => {
