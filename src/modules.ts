@@ -210,7 +210,6 @@ export function packModules(stats: ExtModules, id: string, options: Options, bui
     // Get first level dependency graph
     verbose && console.log(`Fetch dependency graph from ${packageJsonPath}`)
 
-    console.log('=>>>>>>>> path is', path.dirname(packageJsonPath));
     return packager.getProdDependencies(path.dirname(packageJsonPath), 1).then(dependencyGraph => {
       const problems = _.get(dependencyGraph, 'problems', []);
 
