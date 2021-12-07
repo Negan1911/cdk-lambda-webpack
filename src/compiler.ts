@@ -74,7 +74,7 @@ export function webpackCompile(config: Configuration): Promise<ExtModules> {
   return BbPromise.fromCallback<Stats>(cb => webpack(config).run(cb)).then(stats => {
     if (stats.hasErrors()) {
       console.error('Webpack compilation error, see stats above');
-      console.error(stats.toJson())
+      console.error(stats.toString())
       process.exit(1)
     }
 
