@@ -73,7 +73,9 @@ function getExternalModules({ compilation }: Stats): ExtModule[] {
 export function webpackCompile(config: Configuration): Promise<ExtModules> {
   return BbPromise.fromCallback<Stats>(cb => webpack(config).run(cb)).then(stats => {
     if (stats.hasErrors()) {
-      throw new Error('Webpack compilation error, see stats above');
+      console.error('Webpack compilation error, see stats above');
+      console.error(stats.toJson())
+      process.exit(1)
     }
 
     return {
