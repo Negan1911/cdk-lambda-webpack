@@ -1,6 +1,14 @@
 {
   "branches": [
-    "master"
+    "master",
+    {
+      "name": "alpha",
+      "prerelease": true
+    },
+    {
+      "name": "beta",
+      "prerelease": true
+    }
   ],
   "verifyConditions": [
     "@semantic-release/npm",

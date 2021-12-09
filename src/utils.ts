@@ -127,3 +127,15 @@ export function spawnProcess(command: string, args: string[], options?: childPro
     });
   });
 }
+
+export function parseArgv(): Array<string> {
+  try {
+    if (process.env.npm_config_argv) {
+      const e = JSON.parse(process.env.npm_config_argv)
+      return e?.original ?? []
+    }
+    return []
+  } catch (e) {
+    return []
+  }
+}
