@@ -50,7 +50,7 @@ export async function LambdaWebpack(scope: Construct, id: string, { webpack, han
  * @param options - Any extra options (skipCompile for now)
  * @returns Stack instance ready to use.
  */
-export async function LambdaWebpackBuilder(stack: Stack, options: StackOptions) {
+export async function LambdaWebpackBuilder(stack: Stack, options: StackOptions = {}) {
   const argv_config = parseArgv()
   let skipCompile = options?.skipCompile ?? argv_config?.includes('deploy') ?? false
 
