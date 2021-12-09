@@ -1,6 +1,6 @@
 {
   "name": "cdk-lambda-webpack",
-  "version": "1.2.0-alpha.2",
+  "version": "1.2.0-alpha.3",
   "description": "Construct for AWS Lambda with Webpack",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
