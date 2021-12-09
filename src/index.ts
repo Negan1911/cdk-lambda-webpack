@@ -25,7 +25,7 @@ interface LambdaWebpackProps extends Omit<lambda.FunctionProps, 'code'> {
   webpack: Options
 }
 
-export async function LambdaWebpack(scope: Construct, id: string, { webpack, handler, ...props }: LambdaWebpackProps) {
+export function LambdaWebpack(scope: Construct, id: string, { webpack, handler, ...props }: LambdaWebpackProps) {
   const zipId = uid()
   const [entry, exportName] = getEntry(handler)
 
