@@ -8,6 +8,9 @@ import * as lambda from '@aws-cdk/aws-lambda'
 import { Options, uid, getEntry } from './utils'
 
 interface LambdaWebpackProps extends Omit<lambda.FunctionProps, 'code'> {
+  /**
+   * Options to build your lambda.
+   */
   webpack: Options
 }
 

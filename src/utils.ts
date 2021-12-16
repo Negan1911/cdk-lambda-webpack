@@ -11,18 +11,73 @@ export type ExtModule = { origin: string; external: string }
 export type ExtModules = { outputPath: string, externalModules: ExtModule[] }
 
 export type Options = {
+  /**
+   * You can select the packager that will be used to package your external modules.
+   * The packager can be set with the packager configuration.
+   * Currently it can be 'npm' or 'yarn' and defaults to using npm when not set.
+   */
   packager: 'npm' | 'yarn'
+  /**
+   * The path to the webpack configuration file.
+   */
   webpackConfigPath: string
+  /**
+   * Common optional packager options regarding dependency resolution.
+   */
   includeModules?: {
+    /**
+     * Relative path to custom `package.json` file, by default uses `package.json`.
+     */
     packagePath?: string,
+    /**
+     * Sometimes it might happen that you use dynamic requires in your code, i.e. you
+     * require modules that are only known at runtime. Webpack is not able to detect
+     * such externals and the compiled package will miss the needed dependencies.
+     * In such cases you can force the plugin to include certain modules by setting
+     * them in the `forceInclude` array property. However the module must appear in
+     * your service's production dependencies in `package.json`.
+     */
     forceInclude?: string[],
+    /**
+     * You can forcefully exclude detected external modules, e.g. if you have a module
+     * in your dependencies that is already installed at your provider's environment.
+     * 
+     * Just add them to the `forceExclude` array property and they will not be packaged.
+     */
     forceExclude?: string[],
+
+    /**
+     * In some configuration (like monorepo), `node_modules` is in parent directory which is different from
+     * where `package.json` is. Set `nodeModulesRelativeDir` to specify the relative directory where `node_modules` is.
+     */
     nodeModulesRelativeDir?: string
   },
+  /**
+   * Different package options, depending if the packager is `npm` or `yarn`.
+   */
   options?: {
+    /**
+     * Do not run `npm install` / `yarn install` (assume install completed).
+     * Defaults to false, Available for both `npm` and `yarn`.
+     */
     noInstall?: boolean,
+
+    /**
+     * Do not require an up-to-date yarn.lock
+     * Defaults to false, Available only for `yarn`.
+     */
     noFrozenLockfile?: boolean
+
+    /**
+     * Do not execute package.json hook scripts on install
+     * Defaults to false, Available only for `yarn`.
+     */
     ignoreScripts?: boolean
+
+    /**
+     * Specify number of concurrent network requests
+     * Available only for `yarn`.
+     */
     networkConcurrency?: number
   }
 }
