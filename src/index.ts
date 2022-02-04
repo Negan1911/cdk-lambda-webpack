@@ -4,7 +4,7 @@ import { Construct } from 'constructs'
 import { zipDirectory } from './zipper'
 import { packModules } from './modules'
 import { webpackCompile } from './compiler'
-import * as lambda from '@aws-cdk/aws-lambda'
+import * as lambda from 'aws-cdk-lib/aws-lambda'
 import { Options, uid, getEntry } from './utils'
 
 interface LambdaWebpackProps extends Omit<lambda.FunctionProps, 'code'> {
