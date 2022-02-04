@@ -8,7 +8,7 @@ It will budle your resources with webpack and create separate assets so only the
 ## Example:
 
 ```ts
-import * as cdk from '@aws-cdk/core'
+import * as cdk from 'aws-cdk-lib/core'
 import { LambdaWebpack } from 'cdk-lambda-webpack'
 
 /* For now, you need to use "async" stacks on the following way: */

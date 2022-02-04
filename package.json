@@ -19,7 +19,7 @@
     "semantic-release": "semantic-release"
   },
   "peerDependencies": {
-    "@aws-cdk/core": "*",
+    "aws-cdk-lib": "^2.0.0",
     "webpack": "^5.0.0"
   },
   "dependencies": {
