@@ -82,7 +82,7 @@ export type Options = {
   }
 }
 
-export function getEntry(entry: string): [string, string] {
+export function getEntry(entry: string): [string, string, string] {
   const entrySplit = entry.split(':')
 
   if (!entry.includes(':') || entrySplit.length !== 2)
@@ -90,6 +90,7 @@ export function getEntry(entry: string): [string, string] {
 
   return [
     path.isAbsolute(entrySplit[0]) ? entrySplit[0] : path.join(process.cwd(), entrySplit[0]),
+    entrySplit[0].replace(/\.[^/.]+$/, ''),
     entrySplit[1]
   ]
 }

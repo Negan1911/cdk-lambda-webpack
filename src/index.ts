@@ -19,16 +19,16 @@ export async function LambdaWebpack(scope: Construct, id: string, { webpack, han
   const config = require(path.isAbsolute(webpack.webpackConfigPath) ? webpack.webpackConfigPath : path.join(process.cwd(), webpack.webpackConfigPath))
   const buildFolder = path.join(process.cwd(), '.build')
   const buildPath = path.join(buildFolder, id)
-  const [entry, exportName] = getEntry(handler)
-  const _config = typeof config === 'function' ? config({ id, buildPath, buildFolder, entry }) : (config || {})
+  const [entry, webpackEntry, exportName] = getEntry(handler)
+  const _config = typeof config === 'function' ? config({ id, buildPath, webpackEntry, buildFolder, entry }) : (config || {})
   
   const stat = await webpackCompile({
     ..._config,
     entry,
     output: {
-      ...(_config.output || {}),
-      path: buildPath,
-      filename: '[name].js'
+        ...(_config.output || {}),
+        path: buildPath,
+        filename: `${webpackEntry}.js`
     }
   })
   
@@ -37,7 +37,7 @@ export async function LambdaWebpack(scope: Construct, id: string, { webpack, han
   
   return new lambda.Function(scope, id, {
     ...props,
-    handler: `main.${exportName}`,
+    handler: `${webpackEntry}.${exportName}`,
     code: lambda.Code.fromAsset(path.join(process.cwd(), '.build', `${zipId}.zip`))
   })
 }
