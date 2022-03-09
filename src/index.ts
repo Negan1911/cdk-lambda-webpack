@@ -22,7 +22,7 @@ export async function LambdaWebpack(scope: Construct, id: string, { webpack, han
   const [entry, exportName] = getEntry(handler)
   
   const stat = await webpackCompile({
-    ...(typeof config === 'function' ? config({ buildPath, buildFolder, entry }) : (config || {})),
+    ...(typeof config === 'function' ? config({ id, buildPath, buildFolder, entry }) : (config || {})),
     entry,
     output: {
       ...(config.output ||{}),
