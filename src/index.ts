@@ -20,12 +20,13 @@ export async function LambdaWebpack(scope: Construct, id: string, { webpack, han
   const buildFolder = path.join(process.cwd(), '.build')
   const buildPath = path.join(buildFolder, id)
   const [entry, exportName] = getEntry(handler)
+  const _config = typeof config === 'function' ? config({ id, buildPath, buildFolder, entry }) : (config || {})
   
   const stat = await webpackCompile({
-    ...(typeof config === 'function' ? config({ id, buildPath, buildFolder, entry }) : (config || {})),
+    ..._config,
     entry,
     output: {
-      ...(config.output ||{}),
+      ...(_config.output || {}),
       path: buildPath,
       filename: '[name].js'
     }
