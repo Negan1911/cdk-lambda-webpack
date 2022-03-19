@@ -51,6 +51,47 @@ export class Yarn2 {
     return pkg.identHash === target.manifest.name?.identHash
   }
 
+  private get rootCwd() {
+    const topWorkspace = this.project?.topLevelWorkspace
+
+    if (!topWorkspace)
+      throw new Error('Cannot found top workspace.')
+    
+    return topWorkspace.cwd
+  }
+
+  private parseDescriptor(descriptor: Descriptor) {
+    if (descriptor.range.startsWith('workspace:')) {
+      if (this.isDescriptorWorkspaceTarget(descriptor)) {
+        descriptor.range = 'file:.'
+      } else {
+        descriptor.range = `file:${path.join(
+          this.rootCwd,
+          descriptor.range.replace('workspace:', '')
+        )}`
+      }
+    }
+  }
+
+  private parsePackage(pkg: Package) {
+    if (this.isPackageWorkspaceTarget(pkg)) {
+      pkg.reference = 'file:.'
+    } else {
+      pkg.reference = `file:${path.join(
+        this.rootCwd,
+        pkg.reference.replace('workspace:', '')
+      )}`
+    }
+  }
+
+  private parseDeps(dep: string) {
+    if (dep.startsWith('workspace:')) {
+      return `file:${path.join(this.rootCwd, dep.replace('workspace:', ''))}`
+    }
+
+    return dep
+  }
+
   get targetWorkspace(): Workspace {
     if (!this.project)
       throw new Error('Project not initiated.')
@@ -125,41 +166,16 @@ export class Yarn2 {
     // Replace workspace references with file references.
     for (const [, descriptor] of this.project.storedDescriptors) {
       // If is the target package, replace with root, otherwise with the file path.
-      if (descriptor.range.startsWith('workspace:')) {
-        if (this.isDescriptorWorkspaceTarget(descriptor)) {
-          descriptor.range = 'file:.'
-        } else {
-          descriptor.range = `file:${path.join(
-            this.target,
-            descriptor.range.replace('workspace:', '')
-          )}`
-        }
-      }
+      this.parseDescriptor(descriptor)
     }
 
     for (const [, pkg] of this.project.storedPackages) {
       if (pkg.reference.startsWith('workspace:')) {
         // If is the target package, replace with root, otherwise with the file path.
-        if (this.isPackageWorkspaceTarget(pkg)) {
-          pkg.reference = 'file:.'
-        } else {
-          pkg.reference = `file:${path.join(
-            this.target,
-            pkg.reference.replace('workspace:', '')
-          )}`
-        }
+        this.parsePackage(pkg)
 
         for (const [, dep] of pkg.dependencies) {
-          if (dep.range.startsWith('workspace:')) {
-            if (this.isDescriptorWorkspaceTarget(dep)) {
-              dep.range = 'file:.'
-            } else {
-              dep.range = `file:${path.join(
-                this.target,
-                dep.range.replace('workspace:', '')
-              )}`
-            }
-          }
+          this.parseDescriptor(dep)
         }
       }
     }
@@ -167,26 +183,10 @@ export class Yarn2 {
     for (const [, pkg] of this.project.originalPackages) {
       if (pkg.reference.startsWith('workspace:')) {
         // If is the target package, replace with root, otherwise with the file path.
-        if (this.isPackageWorkspaceTarget(pkg)) {
-          pkg.reference = 'file:.'
-        } else {
-          pkg.reference = `file:${path.join(
-            this.target,
-            pkg.reference.replace('workspace:', '')
-          )}`
-        }
+        this.parsePackage(pkg)
 
         for (const [, dep] of pkg.dependencies) {
-          if (dep.range.startsWith('workspace:')) {
-            if (this.isDescriptorWorkspaceTarget(dep)) {
-              dep.range = 'file:.'
-            } else {
-              dep.range = `file:${path.join(
-                this.target,
-                dep.range.replace('workspace:', '')
-              )}`
-            }
-          }
+          this.parseDescriptor(dep)
         }
       }
     }
@@ -219,7 +219,7 @@ export class Yarn2 {
         description: 'Builded with cdk-lambda-webpack',
         dependencies: Object.fromEntries(
           Array.from(this.targetWorkspace.manifest.dependencies).map(
-            ([, _]) => [_.scope ? `@${_.scope}/${_.name}` : _.name, _.range]
+            ([, _]) => [_.scope ? `@${_.scope}/${_.name}` : _.name, this.parseDeps(_.range)]
           )
         ),
       })
