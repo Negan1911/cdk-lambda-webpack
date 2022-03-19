@@ -10,17 +10,22 @@ const NODE_PROTOCOL = 'node:';
 export type ExtModule = { origin: string; external: string }
 export type ExtModules = { outputPath: string, externalModules: ExtModule[] }
 
-export type Options = {
+
+export type NarrowOptions = {
+  /**
+   * The path to the webpack configuration file.
+   */
+  webpackConfigPath: string
+}
+
+export type Options = NarrowOptions & {
   /**
    * You can select the packager that will be used to package your external modules.
    * The packager can be set with the packager configuration.
    * Currently it can be 'npm' or 'yarn' and defaults to using npm when not set.
    */
   packager: 'npm' | 'yarn'
-  /**
-   * The path to the webpack configuration file.
-   */
-  webpackConfigPath: string
+  
   /**
    * Common optional packager options regarding dependency resolution.
    */
