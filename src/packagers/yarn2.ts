@@ -148,6 +148,19 @@ export class Yarn2 {
             pkg.reference.replace('workspace:', '')
           )}`
         }
+
+        for (const [, dep] of pkg.dependencies) {
+          if (dep.range.startsWith('workspace:')) {
+            if (this.isDescriptorWorkspaceTarget(dep)) {
+              dep.range = 'file:.'
+            } else {
+              dep.range = `file:${path.join(
+                this.target,
+                dep.range.replace('workspace:', '')
+              )}`
+            }
+          }
+        }
       }
     }
 
@@ -161,6 +174,19 @@ export class Yarn2 {
             this.target,
             pkg.reference.replace('workspace:', '')
           )}`
+        }
+
+        for (const [, dep] of pkg.dependencies) {
+          if (dep.range.startsWith('workspace:')) {
+            if (this.isDescriptorWorkspaceTarget(dep)) {
+              dep.range = 'file:.'
+            } else {
+              dep.range = `file:${path.join(
+                this.target,
+                dep.range.replace('workspace:', '')
+              )}`
+            }
+          }
         }
       }
     }
