@@ -59,7 +59,7 @@ export async function LambdaWebpackYarn2(scope: Construct, id: string, { webpack
   const config = require(path.isAbsolute(webpack.webpackConfigPath) ? webpack.webpackConfigPath : path.join(process.cwd(), webpack.webpackConfigPath))
 
   const buildFolder = await xfs.mktempPromise()
-  const distFolder = path.join(process.cwd(), '.build')
+  const distFolder = path.join(process.cwd(), 'cdk.out')
   
   const [entry, webpackEntry, exportName] = getEntry(handler)
   const _config = typeof config === 'function' ? config({ id, buildPath: buildFolder, webpackEntry, buildFolder, entry }) : (config || {})
@@ -80,6 +80,6 @@ export async function LambdaWebpackYarn2(scope: Construct, id: string, { webpack
   return new lambda.Function(scope, id, {
     ...props,
     handler: `${webpackEntry}.${exportName}`,
-    code: lambda.Code.fromAsset(path.join(process.cwd(), '.build', `${zipId}.zip`))
+    code: lambda.Code.fromAsset(path.join(distFolder, `${zipId}.zip`))
   })
 }
