@@ -69,7 +69,7 @@ export async function LambdaWebpackYarn2(scope: Construct, id: string, { webpack
     entry,
     output: {
         ...(_config.output || {}),
-        path: distFolder,
+        path: buildFolder,
         filename: `${webpackEntry}.js`
     }
   })
