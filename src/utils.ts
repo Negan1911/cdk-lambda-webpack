@@ -87,14 +87,14 @@ export type Options = NarrowOptions & {
   }
 }
 
-export function getEntry(entry: string): [string, string, string] {
+export function getEntry(entry: string, cwd: string): [string, string, string] {
   const entrySplit = entry.split(':')
 
   if (!entry.includes(':') || entrySplit.length !== 2)
     throw new Error(`Invalid entry: ${entry} does not conform the epected [path]:[export] format.`)
 
   return [
-    path.isAbsolute(entrySplit[0]) ? entrySplit[0] : path.join(process.cwd(), entrySplit[0]),
+    path.isAbsolute(entrySplit[0]) ? entrySplit[0] : path.join(cwd, entrySplit[0]),
     entrySplit[0].replace(/\.[^/.]+$/, ''),
     entrySplit[1]
   ]

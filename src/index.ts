@@ -11,17 +11,22 @@ import { Options, uid, getEntry, NarrowOptions } from './utils'
 
 interface LambdaWebpackProps extends Omit<lambda.FunctionProps, 'code'> {
   /**
+   * Current working directory.
+   */
+  cwd?: string
+  /**
    * Options to build your lambda.
    */
   webpack: Options
 }
 
-export async function LambdaWebpack(scope: Construct, id: string, { webpack, handler, ...props }: LambdaWebpackProps) {
+export async function LambdaWebpack(scope: Construct, id: string, { webpack, handler, cwd, ...props }: LambdaWebpackProps) {
   const zipId = uid()
+  const _cwd = cwd || process.cwd()
   const config = require(path.isAbsolute(webpack.webpackConfigPath) ? webpack.webpackConfigPath : path.join(process.cwd(), webpack.webpackConfigPath))
-  const buildFolder = path.join(process.cwd(), '.build')
+  const buildFolder = path.join(_cwd, '.build')
   const buildPath = path.join(buildFolder, id)
-  const [entry, webpackEntry, exportName] = getEntry(handler)
+  const [entry, webpackEntry, exportName] = getEntry(handler, _cwd)
   const _config = typeof config === 'function' ? config({ id, buildPath, webpackEntry, buildFolder, entry }) : (config || {})
   
   const stat = await webpackCompile({
@@ -46,6 +51,10 @@ export async function LambdaWebpack(scope: Construct, id: string, { webpack, han
 
 interface LambdaWebpackYarn2Props extends Omit<lambda.FunctionProps, 'code'> {
   /**
+   * Current working directory.
+   */
+  cwd?: string
+  /**
    * Options to build your lambda.
    */
   webpack: NarrowOptions
@@ -54,14 +63,15 @@ interface LambdaWebpackYarn2Props extends Omit<lambda.FunctionProps, 'code'> {
 /**
  * Experimental Yarn2 support.
  */
-export async function LambdaWebpackYarn2(scope: Construct, id: string, { webpack, handler, ...props }: LambdaWebpackYarn2Props) {
+export async function LambdaWebpackYarn2(scope: Construct, id: string, { webpack, handler, cwd, ...props }: LambdaWebpackYarn2Props) {
   const zipId = uid()
+  const _cwd = cwd || process.cwd()
   const config = require(path.isAbsolute(webpack.webpackConfigPath) ? webpack.webpackConfigPath : path.join(process.cwd(), webpack.webpackConfigPath))
 
   const buildFolder = await xfs.mktempPromise()
-  const distFolder = path.join(process.cwd(), 'cdk.out')
+  const distFolder = path.join(_cwd, 'cdk.out')
   
-  const [entry, webpackEntry, exportName] = getEntry(handler)
+  const [entry, webpackEntry, exportName] = getEntry(handler, _cwd)
   const _config = typeof config === 'function' ? config({ id, buildPath: buildFolder, webpackEntry, buildFolder, entry }) : (config || {})
 
   await webpackCompile({
