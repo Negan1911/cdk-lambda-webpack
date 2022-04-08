@@ -19,8 +19,8 @@ export class Yarn2 {
   target: PortablePath
   configuration?: Configuration
 
-  constructor(target: PortablePath) {
-    this.cwd = npath.toPortablePath(process.cwd())
+  constructor(target: PortablePath, cwd: string) {
+    this.cwd = npath.toPortablePath(cwd)
     this.target = target
     return this
   }

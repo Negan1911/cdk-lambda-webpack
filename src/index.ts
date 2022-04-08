@@ -84,7 +84,7 @@ export async function LambdaWebpackYarn2(scope: Construct, id: string, { webpack
     }
   })
 
-  await new Yarn2(buildFolder).install()
+  await new Yarn2(buildFolder, _cwd).install()
   await zipDirectory(buildFolder, distFolder, zipId)
   
   return new lambda.Function(scope, id, {
